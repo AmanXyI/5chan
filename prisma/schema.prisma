@@ -14,14 +14,118 @@ datasource db {
 }
 
 
+
 model Board {
   id String @id @default(uuid())
   title String @unique
   description String
   profileUrl String
 
+  threads Thread[]
+  users UsersOnBoards[]
 
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model UsersOnBoards{
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  boardId String 
+  board Board @relation(fields: [boardId], references: [id], onDelete: Cascade)
+
+  @@id([userId, boardId])
+}
+
+model Thread{
+  id String @id @default(uuid())
+  title String
+  description String
+  imageUrl String?
+  upvotes Int
+  downvotes Int
+
+  comments Comment[]
+
+  boardId String
+  board Board @relation(fields: [boardId], references: [id], onDelete: Cascade)
+
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([boardId])
+}
+
+model Comment{
+  id String @id @default(uuid())
+  text String
+  upvotes Int
+  downvotes Int
+
+  threadId String
+  thread Thread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([threadId])
+}
+
+
+// Auth
+model Account {
+  id                 String  @id @default(cuid())
+  userId             String  @map("user_id")
+  type               String
+  provider           String
+  providerAccountId  String  @map("provider_account_id")
+  refresh_token      String? @db.Text
+  access_token       String? @db.Text
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String? @db.Text
+  session_state      String?
+ 
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+ 
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique @map("session_token")
+  userId       String   @map("user_id")
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+  @@map("sessions")
+}
+ 
+model User {
+  id            String    @id @default(cuid())
+  username      String   @unique
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime? @map("email_verified")
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+
+  boards UsersOnBoards[]
+
+ 
+  @@map("users")
+}
+ 
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+ 
+  @@unique([identifier, token])
+  @@map("verificationtokens")
 }
