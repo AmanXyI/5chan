@@ -85,7 +85,7 @@ model Account {
   access_token       String? @db.Text
   expires_at         Int?
   token_type         String?
-  scope              String?
+  scope              String? 
   id_token           String? @db.Text
   session_state      String?
  
@@ -107,7 +107,6 @@ model Session {
  
 model User {
   id            String    @id @default(cuid())
-  username      String   @unique
   name          String?
   email         String?   @unique
   emailVerified DateTime? @map("email_verified")
