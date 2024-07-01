@@ -13,29 +13,46 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Profile{
+  id String @id @default(uuid())
+  username String @unique
+  profileImageURL String?
 
+  userId String @unique
+  user User @relation(fields: [userId],references: [id], onDelete: Cascade)
+ 
+  boards ProfilesOnBoards[]
+  threads Thread[]
+  comments Comment[]
+
+  @@index([userId])
+}
 
 model Board {
   id String @id @default(uuid())
   title String @unique
   description String
-  profileUrl String
+  profileUrl String?
 
   threads Thread[]
-  users UsersOnBoards[]
+  profiles ProfilesOnBoards[]
 
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-model UsersOnBoards{
-  userId String
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+// TODO - defile roles for profiles in boards by creating new table for roles for each board
+
+// NOTE - I can use profile on boards to assign roles to users
+
+model ProfilesOnBoards{
+  profileId String
+  profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
   boardId String 
   board Board @relation(fields: [boardId], references: [id], onDelete: Cascade)
 
-  @@id([userId, boardId])
+  @@id([boardId,profileId])
 }
 
 model Thread{
@@ -51,6 +68,8 @@ model Thread{
   boardId String
   board Board @relation(fields: [boardId], references: [id], onDelete: Cascade)
 
+  profileId String
+  profile Profile @relation(fields: [profileId],references: [id],onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -66,6 +85,9 @@ model Comment{
 
   threadId String
   thread Thread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+
+  profileId String
+  profile Profile @relation(fields: [profileId],references: [id ],onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -114,7 +136,11 @@ model User {
   accounts      Account[]
   sessions      Session[]
 
-  boards UsersOnBoards[]
+  // boards UsersOnBoards[]
+
+  profile Profile?
+
+  
 
  
   @@map("users")
@@ -128,3 +154,5 @@ model VerificationToken {
   @@unique([identifier, token])
   @@map("verificationtokens")
 }
+
+

@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-import Navbar from "../components/navbar";
 import Sidebar from "../components/sidebar";
 import { cn } from "@/lib/utils";
+import Navbar from "@/components/navbar/navbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={cn(inter.className, "dark:black flex flex-col")}>
+      <body className={cn(inter.className, "dark:black flex h-full flex-col")}>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
@@ -28,7 +28,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Navbar />
-          <div className="flex h-full">
+          <div className="flex h-full overflow-hidden">
             <Sidebar />
             {children}
           </div>
