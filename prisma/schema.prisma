@@ -58,6 +58,7 @@ model ProfilesOnBoards{
 model Thread{
   id String @id @default(uuid())
   title String
+  // TODO - change description to content
   description String
   imageUrl String?
   upvotes Int
