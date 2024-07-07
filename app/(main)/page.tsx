@@ -18,7 +18,6 @@ export default async function Home() {
       },
     },
   });
-  // console.log(data);
   return (
     <div className="flex w-full">
       <ScrollArea className="w-full pl-[15rem]">

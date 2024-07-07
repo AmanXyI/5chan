@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
-import Sidebar from "../components/sidebar";
+import { ThemeProvider } from "@/components/providers/theme-provider";
+import Sidebar from "@/components/navigation/sidebar";
 import { cn } from "@/lib/utils";
-import Navbar from "@/components/navbar/navbar";
+import Navbar from "@/components/navigation/navbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,7 +20,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={cn(inter.className, "dark:black flex h-full flex-col")}>
+      <body
+        className={cn(inter.className, "dark:[#0e1113] flex h-full flex-col")}
+      >
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
