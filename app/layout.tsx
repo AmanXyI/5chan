@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/providers/theme-provider";
 import Sidebar from "@/components/navigation/sidebar";
 import { cn } from "@/lib/utils";
 import Navbar from "@/components/navigation/navbar";
+import ModalProvider from "@/hooks/use-modal-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,7 +29,9 @@ export default function RootLayout({
           defaultTheme="dark"
           enableSystem
           disableTransitionOnChange
+          storageKey="5chan-theme"
         >
+          <ModalProvider />
           <Navbar />
           <div className="flex h-full overflow-hidden">
             <Sidebar />

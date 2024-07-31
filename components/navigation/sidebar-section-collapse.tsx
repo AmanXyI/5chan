@@ -4,6 +4,7 @@ import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
 import { BiChevronDown, BiChevronUp } from "react-icons/bi";
 import { LuPlus } from "react-icons/lu";
+import { useModal } from "@/hooks/use-modal-store";
 
 interface SectionCollapseProps {
   heading: string;
@@ -19,6 +20,9 @@ const SectionCollapse = ({
   data: boardsData,
 }: SectionCollapseProps) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
+
+  const { onOpen } = useModal();
+
   return (
     <div className="border-t py-3">
       <Button
@@ -45,7 +49,10 @@ const SectionCollapse = ({
           isCollapsed && "hidden",
         )}
       >
-        <Button className="flex gap-2 pl-6">
+        <Button
+          className="flex gap-2 pl-6"
+          onClick={() => onOpen("createBoard")}
+        >
           <LuPlus size={25} />
           Create a Board
         </Button>
